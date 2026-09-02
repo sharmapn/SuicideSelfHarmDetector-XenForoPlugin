@@ -1,43 +1,72 @@
 # SuicideSelfHarmDetector-XenForoPlugin
 
-A XenForo add-on for integrating a self-managed suicide and self-harm text classifier into an online mental-health community moderation workflow.
+A XenForo 2.3 add-on for integrating a self-managed suicide and self-harm text classifier into a human-supervised moderation workflow.
 
-This repository contains the **XenForo plugin and its integration/reference material**. The machine-learning, deep-learning and transformer research scripts, model evaluation and aggregate experimental results are maintained separately in the [MHFSafeguard research repository](https://github.com/sharmapn/MHFSafeguard).
+The machine-learning, deep-learning and transformer research scripts and aggregate evaluation results are maintained separately in the [MHFSafeguard research repository](https://github.com/sharmapn/MHFSafeguard).
 
-## Purpose
+## Status
 
-The add-on intercepts new threads, replies and edited posts, normalises the submitted text, sends the message to a configured classifier API, interprets the returned risk assessment, and applies the configured moderation policy.
+**Research prototype / staging candidate.** The code is targeted at **XenForo 2.3.0+** and has automated PHP, Python, JSON and XML static checks. It should still be installed and exercised on a non-production XenForo 2.3 site before production deployment because XenForo itself is proprietary and is not included in this repository's CI environment.
 
-The classifier is intended to distinguish three research categories:
+## Classifier used by the reference backend
 
-1. **Not Ideation or method or action**
+`dev_server/server.py` is now designed for the final **Linear SVM** pipeline produced by the companion training workflow:
+
+```text
+Suicide_SVM_pipeline.joblib
+```
+
+The saved sklearn pipeline contains the fitted `CountVectorizer`, `TfidfTransformer`, and `LinearSVC`. The model file is intentionally not committed to this public repository. On the classifier server, set:
+
+```text
+MHFS_MODEL_PATH=/protected/path/Suicide_SVM_pipeline.joblib
+```
+
+The research classifier is sentence-level. The API adapter therefore splits a full XenForo message into sentences, classifies each sentence, and aggregates the result using the priority:
+
+```text
+Method/action > Ideation > Not harmful
+```
+
+`LinearSVC` does not provide calibrated probabilities. The API's score is a decision-function ranking proxy and **must not be interpreted as a clinical probability**. For the final SVM backend, moderation is primarily label-driven.
+
+See [`dev_server/README.md`](dev_server/README.md) for backend setup and deployment.
+
+## Research categories
+
+The classifier distinguishes three categories:
+
+1. **Not Ideation or method or action** (`Not Suicide post` internally)
 2. **Suicide or Self Harm Ideation**
 3. **Method or action of Suicide, Self-Harm or Harming others**
 
-The plugin is designed as a **human-supervised moderation support tool**, not an autonomous replacement for moderators.
+The add-on is intended to support moderators, not replace them.
 
 ## Workflow
 
 ```text
-User submits thread/reply/edit
+User submits thread / reply / edit
         |
         v
-XenForo plugin intercepts message
+XenForo's normal spam checks
         |
         v
-Text normalisation
+MHFSafeguard intercepts otherwise-visible content
+        |
+        v
+BBCode/text normalisation
         |
         v
 Classifier API request
         |
         v
-Risk label + score + recommended action
+Sentence-level SVM classification + aggregation
         |
         v
-Allow / log / moderate / request revision
+Allow / log / native XenForo moderation / revision request
         |
         v
-Store scan record for moderator review
+Privacy-conscious scan audit record
 ```
 
 ![Workflow of the XenForo plugin](docs/images/workflow.svg)
@@ -47,38 +76,41 @@ Store scan record for moderator review
 ```text
 SuicideSelfHarmDetector-XenForoPlugin/
 ├── README.md
-├── upload/                         installable XenForo add-on tree
+├── upload/
 │   └── src/addons/Pankaj/MHFSafeguard/
-├── docs/images/                    workflow and interface mock-ups
-└── dev_server/                     legacy/reference API adapter for development
+├── dev_server/
+│   ├── server.py
+│   ├── requirements.txt
+│   └── README.md
+├── docs/images/
+└── .github/workflows/static-checks.yml
 ```
 
-The `upload/` directory mirrors the structure expected by a XenForo installation.
-
-## Add-on structure
+## XenForo add-on structure
 
 ```text
-upload/
-└── src/
-    └── addons/
-        └── Pankaj/
-            └── MHFSafeguard/
-                ├── addon.json
-                ├── Setup.php
-                ├── Content/
-                ├── Gateway/
-                ├── Pipeline/
-                ├── Repository/
-                ├── XF/
-                │   └── Service/
-                │       ├── Post/
-                │       └── Thread/
-                └── _data/
+upload/src/addons/Pankaj/MHFSafeguard/
+├── addon.json
+├── Setup.php
+├── Content/
+├── Gateway/
+├── Pipeline/
+├── Repository/
+├── XF/Service/
+│   ├── Post/
+│   │   ├── PreparerService.php
+│   │   └── EditorService.php
+│   └── Thread/
+│       ├── CreatorService.php
+│       └── ReplierService.php
+└── _data/
 ```
+
+The class extensions use the XenForo 2.3 `*Service` class names.
 
 ## API contract
 
-The plugin sends a cleaned message and relevant XenForo context to a self-managed classifier endpoint. A typical request contains:
+The add-on sends one cleaned XenForo message plus context to the configured API endpoint:
 
 ```json
 {
@@ -101,7 +133,7 @@ The plugin sends a cleaned message and relevant XenForo context to a self-manage
 }
 ```
 
-The classifier API should return fields such as:
+A successful response contains at least:
 
 ```json
 {
@@ -113,69 +145,85 @@ The classifier API should return fields such as:
 }
 ```
 
-## Plugin actions
+A 2xx response missing required fields is treated as an API failure rather than silently allowing the content.
 
-| Action | Behaviour |
-|---|---|
-| `allow` | Publish normally |
-| `log` | Record classifier result without interrupting publication |
-| `moderate` | Place content into the XenForo moderation workflow |
-| `revise` | Ask the user to revise the message before resubmitting |
+## Moderation policy
+
+| Add-on mode | Not harmful | Ideation | Method/action |
+|---|---|---|---|
+| `log` | publish + log | publish + log | publish + log |
+| `moderate` | publish | moderation queue | moderation queue |
+| `revise` | publish | moderation queue | request revision |
+
+The moderation queue is XenForo's native moderated-content workflow. The current revision response is a generic XenForo validation message; the graphical screens under `docs/images/` are **design mock-ups**, not implemented AdminCP/front-end pages.
 
 ## Configuration
 
-The add-on includes XenForo options for:
+The add-on provides options for:
 
 - enabling/disabling scanning;
 - classifier API URL;
 - optional bearer-token API key;
-- moderation and revision thresholds;
+- action mode (`log`, `moderate`, or `revise`);
+- secondary moderation/revision thresholds for alternate backends;
 - API timeout;
 - fail-open behaviour;
-- storage of message text or raw responses;
+- storage of message text/raw responses;
 - forums excluded from classification.
 
-For initial testing, use logging or moderation mode with conservative settings and retain human review.
+For the final SVM adapter, harmful decisions are label-driven. The threshold values should not be read as calibrated SVM probabilities.
+
+## Privacy defaults
+
+The add-on is configured to minimise persistence of sensitive forum text:
+
+- cleaned message storage is **off by default**;
+- raw API response storage is **off by default**;
+- when message storage is off, flagged-part text is stripped before database logging;
+- a SHA-256 message hash is retained for audit/deduplication purposes.
+
+If raw text storage is intentionally enabled for controlled debugging, restrict database access and apply an appropriate retention policy.
 
 ## Installation
 
-Copy the contents of `upload/` into the XenForo installation root so that the add-on is placed at:
+Copy the contents of `upload/` into the XenForo installation root so that the add-on lands at:
 
 ```text
 src/addons/Pankaj/MHFSafeguard/
 ```
 
-Then install/enable **MHF Safeguard** through the XenForo Admin Control Panel and configure the classifier API endpoint.
+Then:
 
-## Interface mock-ups
+1. install/enable **MHF Safeguard** in the XenForo Admin Control Panel;
+2. deploy the classifier API separately;
+3. point `Classifier API URL` to `/api/classify`;
+4. configure the same bearer token on XenForo and the API server;
+5. begin in `log` mode on a staging site;
+6. confirm thread creation, replies, edits, excluded forums, API failure behaviour, native moderation, and scan logging before enabling moderation/revision in production.
 
-The `docs/images/` directory contains development mock-ups for:
+## Deployment notes
 
-- administrator configuration;
-- classifier scan logs;
-- the user post editor;
-- the moderation-queue notice;
-- the user revision warning; and
-- the overall plugin workflow.
+The XenForo request waits synchronously for the classifier API. For production, keep the classifier endpoint close to the forum server, use HTTPS when traffic crosses a network, use a strong API key, and keep the configured timeout conservative.
 
-## Development server
+`dev_server/server.py` uses Flask for the application but should be served by a production WSGI server (for example Waitress) rather than Flask's built-in development server.
 
-`dev_server/server.py` is preserved from the earlier prototype as a **reference API adapter** for testing the XenForo integration. It uses the older ktrain/BERT model-loading approach and should not be treated as the final production classifier backend. The final model-development and evaluation pipeline is maintained in the research repository.
+## What is not implemented yet
 
-The earlier `server/test.py` fixture was intentionally not migrated because it contained literal sentence examples that are unnecessary in the public plugin repository.
+The core interception, classifier call, policy decision and audit-table logging are implemented. The following are not yet full product features:
+
+- a dedicated AdminCP scan-log browser;
+- inline highlighting of individual risky sentences in the XenForo editor;
+- a moderator dashboard built from the interface mock-ups;
+- calibrated SVM probabilities.
+
+These limitations do not prevent native XenForo moderation, but they should not be mistaken for completed UI features.
 
 ## Research companion
 
-The associated research repository contains the model-development pipeline and evaluation artefacts:
+Model-development code and final aggregate evaluation results:
 
 **https://github.com/sharmapn/MHFSafeguard**
 
-The research evaluates traditional machine learning, neural deep learning and transformer models for sentence-level suicide/self-harm classification.
+## Safety
 
-## Privacy and safety
-
-Mental-health forum content can be highly sensitive. Deployments should minimise stored raw text, protect API traffic, use authentication, restrict access to scan logs, and retain human oversight for moderation decisions.
-
-## Status
-
-Research prototype / development version. Validate on a test XenForo installation before production deployment.
+This software processes sensitive mental-health content and can produce false positives and false negatives. Keep human review in the moderation loop and do not use classifier output as a clinical assessment or diagnosis.
