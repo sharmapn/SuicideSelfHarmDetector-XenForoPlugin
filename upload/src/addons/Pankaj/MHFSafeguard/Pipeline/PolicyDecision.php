@@ -32,14 +32,28 @@ class PolicyDecision
         $score = (float)($result['highest_score'] ?? 0);
 
         // The SVM backend's score is a decision-function ranking proxy, not a
-        // calibrated probability. In particular, a confident safe prediction
-        // can legitimately have a high score. Never moderate a known-safe
-        // label merely because its score exceeds a harmful-content threshold.
+        // calibrated probability. A confident safe prediction can legitimately
+        // have a high score, so a known-safe label must never be moderated just
+        // because its score exceeds a harmful-content threshold.
         if (in_array($label, ['not_harmful', 'not harmful', 'not suicide post', 'safe', 'none'], true))
         {
             return 'allow';
         }
 
+        // For the three-class research model, use the class itself as the main
+        // policy signal. Revision mode is deliberately limited to explicit
+        // Method/action content; Ideation remains a human-moderation case.
+        if (in_array($label, ['method_or_action', 'method or action'], true))
+        {
+            return ($mode === 'revise') ? 'revise' : 'moderate';
+        }
+
+        if ($label === 'ideation')
+        {
+            return 'moderate';
+        }
+
+        // Fallback support for alternate classifier backends.
         if (in_array($recommended, ['block', 'reject', 'revise', 'revision'], true))
         {
             return ($mode === 'revise') ? 'revise' : 'moderate';
@@ -50,8 +64,8 @@ class PolicyDecision
             return 'moderate';
         }
 
-        // Thresholds are only a secondary policy for non-safe labels/backends
-        // which do not already make an explicit recommendation.
+        // Thresholds are secondary only for unknown/non-safe labels from an
+        // alternate backend. They are not treated as calibrated SVM probability.
         if ($mode === 'revise' && $reviseThreshold > 0 && $score >= $reviseThreshold)
         {
             return 'revise';
