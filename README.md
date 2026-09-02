@@ -2,7 +2,7 @@
 
 A XenForo add-on for integrating a self-managed suicide and self-harm text classifier into an online mental-health community moderation workflow.
 
-This repository contains the **XenForo plugin only**. The machine-learning, deep-learning and transformer research scripts, model evaluation and aggregate experimental results are maintained separately in the [MHFSafeguard research repository](https://github.com/sharmapn/MHFSafeguard).
+This repository contains the **XenForo plugin and its integration/reference material**. The machine-learning, deep-learning and transformer research scripts, model evaluation and aggregate experimental results are maintained separately in the [MHFSafeguard research repository](https://github.com/sharmapn/MHFSafeguard).
 
 ## Purpose
 
@@ -40,7 +40,22 @@ Allow / log / moderate / request revision
 Store scan record for moderator review
 ```
 
+![Workflow of the XenForo plugin](docs/images/workflow.svg)
+
 ## Repository structure
+
+```text
+SuicideSelfHarmDetector-XenForoPlugin/
+├── README.md
+├── upload/                         installable XenForo add-on tree
+│   └── src/addons/Pankaj/MHFSafeguard/
+├── docs/images/                    workflow and interface mock-ups
+└── dev_server/                     legacy/reference API adapter for development
+```
+
+The `upload/` directory mirrors the structure expected by a XenForo installation.
+
+## Add-on structure
 
 ```text
 upload/
@@ -60,8 +75,6 @@ upload/
                 │       └── Thread/
                 └── _data/
 ```
-
-The `upload/` directory mirrors the structure expected by a XenForo installation.
 
 ## API contract
 
@@ -133,6 +146,23 @@ src/addons/Pankaj/MHFSafeguard/
 ```
 
 Then install/enable **MHF Safeguard** through the XenForo Admin Control Panel and configure the classifier API endpoint.
+
+## Interface mock-ups
+
+The `docs/images/` directory contains development mock-ups for:
+
+- administrator configuration;
+- classifier scan logs;
+- the user post editor;
+- the moderation-queue notice;
+- the user revision warning; and
+- the overall plugin workflow.
+
+## Development server
+
+`dev_server/server.py` is preserved from the earlier prototype as a **reference API adapter** for testing the XenForo integration. It uses the older ktrain/BERT model-loading approach and should not be treated as the final production classifier backend. The final model-development and evaluation pipeline is maintained in the research repository.
+
+The earlier `server/test.py` fixture was intentionally not migrated because it contained literal sentence examples that are unnecessary in the public plugin repository.
 
 ## Research companion
 
