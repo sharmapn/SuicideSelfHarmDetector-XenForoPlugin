@@ -1,0 +1,1 @@
+# SuicideSelfHarmDetector-XenForoPlugin
