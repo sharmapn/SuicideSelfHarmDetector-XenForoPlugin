@@ -34,10 +34,24 @@ class ClassifierGateway
 
         try
         {
+            // JSON_THROW_ON_ERROR / JsonException are PHP 7.3+. XenForo 2.3
+            // still supports PHP 7.2, so use the portable error APIs here.
+            $requestBody = json_encode(
+                $payload,
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            );
+            if ($requestBody === false)
+            {
+                return $this->failure(
+                    0,
+                    'Could not encode classifier request JSON: ' . json_last_error_msg()
+                );
+            }
+
             $client = \XF::app()->http()->client();
             $response = $client->post($apiUrl, [
                 'headers' => $headers,
-                'body' => json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR),
+                'body' => $requestBody,
                 'timeout' => $timeout,
                 'connect_timeout' => min($timeout, 5),
                 'http_errors' => false
@@ -47,15 +61,12 @@ class ClassifierGateway
             $raw = (string)$response->getBody()->getContents();
             $httpOk = ($status >= 200 && $status < 300);
 
-            try
-            {
-                $data = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
-            }
-            catch (\JsonException $e)
+            $data = json_decode($raw, true);
+            if (json_last_error() !== JSON_ERROR_NONE)
             {
                 return $this->failure(
                     $status,
-                    'Classifier returned invalid JSON: ' . $e->getMessage(),
+                    'Classifier returned invalid JSON: ' . json_last_error_msg(),
                     $raw
                 );
             }
