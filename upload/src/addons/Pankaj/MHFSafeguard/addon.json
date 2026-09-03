@@ -1,13 +1,16 @@
 {
     "legacy_addon_id": "",
     "title": "MHF Safeguard",
-    "description": "Sends XenForo posts to a self-managed classifier API for mental-health forum safety moderation.",
-    "version_id": 1,
-    "version_string": "0.1.0",
+    "description": "Sends XenForo posts to a self-managed suicide/self-harm classifier API for human-supervised moderation.",
+    "version_id": 2000070,
+    "version_string": "0.2.0",
     "dev": "Pankaj Sharma",
     "dev_url": "https://sharmapn.github.io/",
     "faq_url": "",
-    "support_url": "",
+    "support_url": "https://github.com/sharmapn/SuicideSelfHarmDetector-XenForoPlugin",
     "extra_urls": [],
-    "require": []
+    "require": {
+        "XF": [2030000, "XenForo 2.3.0+"],
+        "php": ["7.2.0", "PHP 7.2.0+"]
+    }
 }

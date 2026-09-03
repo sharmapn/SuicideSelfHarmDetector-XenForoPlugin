@@ -2,9 +2,9 @@
 
 namespace Pankaj\MHFSafeguard\XF\Service\Thread;
 
-use Pankaj\MHFSafeguard\XF\Service\Post\Preparer;
+use Pankaj\MHFSafeguard\XF\Service\Post\PreparerService;
 
-class Creator extends XFCP_Creator
+class CreatorService extends XFCP_CreatorService
 {
     public function checkForSpam()
     {
@@ -12,7 +12,7 @@ class Creator extends XFCP_Creator
 
         if ($this->thread->discussion_state === 'visible')
         {
-            /** @var Preparer $preparer */
+            /** @var PreparerService $preparer */
             $preparer = $this->postPreparer;
             $preparer->runMhfSafeguardScan();
         }

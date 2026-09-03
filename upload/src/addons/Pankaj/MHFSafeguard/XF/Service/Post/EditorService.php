@@ -2,7 +2,7 @@
 
 namespace Pankaj\MHFSafeguard\XF\Service\Post;
 
-class Editor extends XFCP_Editor
+class EditorService extends XFCP_EditorService
 {
     public function checkForSpam()
     {
@@ -10,7 +10,7 @@ class Editor extends XFCP_Editor
 
         if ($this->post->message_state === 'visible')
         {
-            /** @var Preparer $preparer */
+            /** @var PreparerService $preparer */
             $preparer = $this->postPreparer;
             $preparer->runMhfSafeguardScan();
         }

@@ -1,0 +1,53 @@
+name: Static and API checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Validate Python syntax
+        run: python -m py_compile dev_server/server.py dev_server/test_api.py
+
+      - name: Install API test dependencies
+        run: python -m pip install -r dev_server/requirements.txt
+
+      - name: Run synthetic SVM API tests
+        run: python -m unittest dev_server/test_api.py -v
+
+      - name: Validate JSON and XML
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          addon = Path('upload/src/addons/Pankaj/MHFSafeguard')
+          json.loads((addon / 'addon.json').read_text(encoding='utf-8'))
+          for path in sorted((addon / '_data').glob('*.xml')):
+              ET.parse(path)
+              print('XML OK:', path)
+          print('JSON OK:', addon / 'addon.json')
+          PY
+
+      - name: Validate PHP syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          find upload/src/addons/Pankaj/MHFSafeguard -name '*.php' -print0 \
+            | while IFS= read -r -d '' file; do php -l "$file"; done
+          php -l tests/php_logic_test.php
+
+      - name: Run PHP policy/privacy logic tests
+        run: php tests/php_logic_test.php

@@ -12,6 +12,13 @@ class SafeguardScan
         $storeMessage = (bool)$options->mhfsStoreMessage;
         $storeRaw = (bool)$options->mhfsStoreRawResponse;
 
+        // The API may return sentence text inside flagged_parts. If message
+        // storage is disabled, strip that text before writing the audit record.
+        $flaggedParts = $this->sanitiseFlaggedParts(
+            (array)($result['flagged_parts'] ?? []),
+            $storeMessage
+        );
+
         try
         {
             \XF::db()->insert('xf_mhfs_scan', [
@@ -31,8 +38,12 @@ class SafeguardScan
                 'api_success' => !empty($result['api_success']) ? 1 : 0,
                 'api_status_code' => (int)($result['api_status_code'] ?? 0),
                 'api_error' => (string)($result['api_error'] ?? ''),
-                'flagged_parts_json' => json_encode($result['flagged_parts'] ?? [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
-                'api_response_json' => $storeRaw ? (string)($result['raw_response'] ?? '') : null,
+                'flagged_parts_json' => json_encode($flaggedParts, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                // Raw API responses can include sentence text. Only retain them
+                // when both explicit raw-response and message storage are on.
+                'api_response_json' => ($storeRaw && $storeMessage)
+                    ? (string)($result['raw_response'] ?? '')
+                    : null,
                 'scan_date' => time()
             ]);
         }
@@ -40,5 +51,34 @@ class SafeguardScan
         {
             \XF::logError('MHF Safeguard scan log failed: ' . $e->getMessage());
         }
+    }
+
+    protected function sanitiseFlaggedParts(array $parts, bool $includeText): array
+    {
+        $safe = [];
+
+        foreach ($parts as $part)
+        {
+            if (!is_array($part))
+            {
+                continue;
+            }
+
+            $item = [
+                'label' => (string)($part['label'] ?? ''),
+                'score' => (float)($part['score'] ?? 0),
+                'start_offset' => (int)($part['start_offset'] ?? 0),
+                'end_offset' => (int)($part['end_offset'] ?? 0)
+            ];
+
+            if ($includeText && isset($part['text']))
+            {
+                $item['text'] = (string)$part['text'];
+            }
+
+            $safe[] = $item;
+        }
+
+        return $safe;
     }
 }

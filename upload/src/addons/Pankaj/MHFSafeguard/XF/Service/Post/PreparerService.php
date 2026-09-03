@@ -5,15 +5,23 @@ namespace Pankaj\MHFSafeguard\XF\Service\Post;
 use Pankaj\MHFSafeguard\Content\ContentContext;
 use Pankaj\MHFSafeguard\Pipeline\ModerationPipeline;
 
-class Preparer extends XFCP_Preparer
+class PreparerService extends XFCP_PreparerService
 {
     protected $mhfsScanPacket = null;
     protected $mhfsContext = null;
+    protected $mhfsScanExecuted = false;
 
     public function runMhfSafeguardScan(): void
     {
-        $options = \XF::options();
+        // checkForSpam() may be reached more than once during a service
+        // lifecycle. Do not call the remote classifier twice for the same save.
+        if ($this->mhfsScanExecuted)
+        {
+            return;
+        }
+        $this->mhfsScanExecuted = true;
 
+        $options = \XF::options();
         if (empty($options->mhfsEnabled))
         {
             return;
@@ -21,7 +29,6 @@ class Preparer extends XFCP_Preparer
 
         $post = $this->post;
         $thread = $post->Thread;
-
         if (!$thread)
         {
             return;
@@ -33,13 +40,16 @@ class Preparer extends XFCP_Preparer
             $excludedForums = [];
         }
 
-        if (!empty($thread->node_id) && in_array((int)$thread->node_id, array_map('intval', $excludedForums), true))
+        if (!empty($thread->node_id)
+            && in_array((int)$thread->node_id, array_map('intval', $excludedForums), true))
         {
             return;
         }
 
         $isFirstPost = method_exists($post, 'isFirstPost') ? (bool)$post->isFirstPost() : false;
-        $message = $isFirstPost ? ((string)$thread->title . "\n" . (string)$post->message) : (string)$post->message;
+        $message = $isFirstPost
+            ? ((string)$thread->title . "\n" . (string)$post->message)
+            : (string)$post->message;
 
         $context = new ContentContext([
             'contentType' => 'post',
@@ -60,7 +70,6 @@ class Preparer extends XFCP_Preparer
         $this->mhfsScanPacket = $packet;
 
         $finalAction = $packet['final_action'] ?? 'allow';
-
         if ($finalAction === 'moderate')
         {
             if ($isFirstPost)
@@ -99,7 +108,6 @@ class Preparer extends XFCP_Preparer
 
         $post = $this->post;
         $thread = $post->Thread;
-
         $context = $this->mhfsContext
             ->withContentId((int)($post->post_id ?? 0))
             ->withThreadId((int)($post->thread_id ?? $thread->thread_id ?? 0));

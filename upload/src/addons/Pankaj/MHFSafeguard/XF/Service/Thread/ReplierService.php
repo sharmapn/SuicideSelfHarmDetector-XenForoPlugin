@@ -2,9 +2,9 @@
 
 namespace Pankaj\MHFSafeguard\XF\Service\Thread;
 
-use Pankaj\MHFSafeguard\XF\Service\Post\Preparer;
+use Pankaj\MHFSafeguard\XF\Service\Post\PreparerService;
 
-class Replier extends XFCP_Replier
+class ReplierService extends XFCP_ReplierService
 {
     public function checkForSpam()
     {
@@ -12,7 +12,7 @@ class Replier extends XFCP_Replier
 
         if ($this->post->message_state === 'visible')
         {
-            /** @var Preparer $preparer */
+            /** @var PreparerService $preparer */
             $preparer = $this->postPreparer;
             $preparer->runMhfSafeguardScan();
         }
