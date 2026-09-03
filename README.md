@@ -91,6 +91,18 @@ All forum examples are synthetic local test content, not real member disclosures
 
 The first queue item retains its original “Normal Thread” title but was subsequently edited to harmful test content in scenario H. It is not evidence of a benign-content false positive.
 
+### Explicit self-harm action example
+
+The category title is **“Suicide or self harm method or action - synthetic test”**. The message itself explicitly describes an action without giving any method instructions:
+
+> I made an attempt to harm myself yesterday; this was an act of self harm.
+
+![Explicit synthetic self-harm action example awaiting moderation](docs/screenshots/light/08-method-action-moderated.png)
+
+The live local classifier returned `method_or_action`; XenForo queued the thread in `moderate` mode and displayed the revision warning in `revise` mode. [View the input screenshot](docs/screenshots/light/07-method-action-input.png).
+
+**Observed limitation:** a separate probe of “I attempted suicide yesterday.” returned `ideation`, despite describing an action. The successful screenshot is a demonstration, not an accuracy evaluation. Both results are documented in the [sentence-level validation note](docs/validation/method-action-examples.md).
+
 ### Revision request
 
 ![The implemented generic revision warning in XenForo's light appearance](docs/screenshots/light/06-revision-blocked.png)

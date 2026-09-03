@@ -44,7 +44,21 @@ This records the current installed name and version. It does not claim that the 
 
 ![Native revision warning after a synthetic method/action submission](light/06-revision-blocked.png)
 
-This capture was reproduced with the live local classifier in `revise` mode. XenForo displayed the configured warning instead of publishing the submission. The native overlay dims the page behind the white dialog. The dialog mentions highlighting, but inline highlighting is not implemented. `log` mode was restored after capture.
+This capture was refreshed using the explicit self-harm sentence shown below and the live local classifier in `revise` mode. XenForo displayed the configured warning instead of publishing the submission. The native overlay dims the page behind the white dialog. The dialog mentions highlighting, but inline highlighting is not implemented. `log` mode was restored after capture.
+
+## Explicit suicide/self-harm method or action example
+
+The title reads **“Suicide or self harm method or action - synthetic test”**. The body is a synthetic, non-instructional description of an action:
+
+> I made an attempt to harm myself yesterday; this was an act of self harm.
+
+![Exact synthetic sentence in the XenForo editor](light/07-method-action-input.png)
+
+![Explicit action example awaiting approval](light/08-method-action-moderated.png)
+
+The message-only classifier probe and the live XenForo thread submission both returned `method_or_action`. The thread was retained in the approval queue in `moderate` mode. A browser submission of the same body triggered the native warning in `revise` mode. These new captures show 11 queued items; the older screenshots show the earlier 10-item state.
+
+The earlier example only said “I made an attempt to harm myself yesterday.” The revised example explicitly says “self harm.” It does not provide a method or instructions. A separate explicit suicide sentence was classified as `ideation`; see the [validation note](../validation/method-action-examples.md) for both outcomes and their limitations.
 
 ## Scenario coverage
 
