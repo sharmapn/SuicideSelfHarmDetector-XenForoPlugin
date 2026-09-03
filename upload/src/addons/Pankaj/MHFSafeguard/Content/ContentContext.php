@@ -25,6 +25,13 @@ class ContentContext
         }
     }
 
+    /**
+     * Context sent to the remote/self-managed classifier API.
+     *
+     * User ID and username are intentionally omitted because the classifier
+     * does not need identity information to classify text. They remain
+     * available to the local XenForo audit repository through the getters.
+     */
     public function toPayloadArray(): array
     {
         return [
@@ -32,8 +39,6 @@ class ContentContext
             'content_id' => (int)$this->contentId,
             'thread_id' => (int)$this->threadId,
             'node_id' => (int)$this->nodeId,
-            'user_id' => (int)$this->userId,
-            'username' => (string)$this->username,
             'title' => (string)$this->title,
             'is_first_post' => (bool)$this->isFirstPost,
         ];
