@@ -156,16 +156,26 @@ def split_sentences(message: str) -> List[Dict[str, Any]]:
 def normalise_label(raw_label: Any) -> str:
     label = str(raw_label).strip().lower()
 
+    # Match known safe labels before looking for harmful-label keywords. The
+    # publication-facing safe wording contains all three words "ideation",
+    # "method" and "action", so keyword-first matching would invert it into a
+    # Method/action result.
+    if (
+        label in {
+            "not suicide post",
+            "not ideation or method or action",
+            "not_harmful",
+            "not harmful",
+            "safe",
+            "none",
+        }
+        or "not suicide" in label
+    ):
+        return SAFE_LABEL
     if "method" in label or "action" in label:
         return METHOD_LABEL
     if "ideation" in label:
         return IDEATION_LABEL
-    if (
-        label in {"not suicide post", "not_harmful", "not harmful", "safe", "none"}
-        or label.startswith("not ")
-        or "not suicide" in label
-    ):
-        return SAFE_LABEL
 
     # Unknown labels are intentionally preserved rather than silently mapped
     # to safe. The aggregation policy below treats them conservatively.

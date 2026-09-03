@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <phrases>
-  <phrase title="option_group.mhfssafeguard" version_id="2000070" version_string="0.2.0"><![CDATA[MHF Safeguard]]></phrase>
-  <phrase title="option_group_description.mhfssafeguard" version_id="2000070" version_string="0.2.0"><![CDATA[Options for sending XenForo posts to your self-managed classification server.]]></phrase>
+  <phrase title="option_group.mhfsSafeguard" version_id="2000070" version_string="0.2.0"><![CDATA[MHF Safeguard]]></phrase>
+  <phrase title="option_group_description.mhfsSafeguard" version_id="2000070" version_string="0.2.0"><![CDATA[Options for sending XenForo posts to your self-managed classification server.]]></phrase>
 
   <phrase title="option.mhfsEnabled" version_id="2000070" version_string="0.2.0"><![CDATA[Enable MHF Safeguard scanning]]></phrase>
   <phrase title="option.mhfsApiUrl" version_id="2000070" version_string="0.2.0"><![CDATA[Classifier API URL]]></phrase>
@@ -15,11 +15,14 @@
   <phrase title="option.mhfsStoreRawResponse" version_id="2000070" version_string="0.2.0"><![CDATA[Store raw API response]]></phrase>
   <phrase title="option.mhfsExcludedForums" version_id="2000070" version_string="0.2.0"><![CDATA[Excluded forums]]></phrase>
 
+  <phrase title="option_explain.mhfsEnabled" version_id="2000070" version_string="0.2.0"><![CDATA[Enable synchronous scanning for new and edited XenForo posts.]]></phrase>
   <phrase title="option_explain.mhfsApiUrl" version_id="2000070" version_string="0.2.0"><![CDATA[Example: https://your-server.example/api/classify. The plugin sends one full cleaned message per request and the reference backend classifies it sentence by sentence.]]></phrase>
   <phrase title="option_explain.mhfsApiKey" version_id="2000070" version_string="0.2.0"><![CDATA[Optional bearer token sent as Authorization: Bearer YOUR_KEY. A strong token is recommended for every non-local deployment.]]></phrase>
   <phrase title="option_explain.mhfsActionMode" version_id="2000070" version_string="0.2.0"><![CDATA[Use log, moderate, or revise. log records results without changing publication. moderate sends Ideation and Method/action content to the XenForo moderation queue. revise sends Ideation to moderation and asks the author to revise Method/action content.]]></phrase>
   <phrase title="option_explain.mhfsModerateThreshold" version_id="2000070" version_string="0.2.0"><![CDATA[Secondary policy for alternate classifier backends. The final Linear SVM backend is label-driven and its score is not a calibrated probability.]]></phrase>
   <phrase title="option_explain.mhfsReviseThreshold" version_id="2000070" version_string="0.2.0"><![CDATA[Secondary policy for alternate classifier backends. Do not interpret the final Linear SVM decision score as a calibrated probability.]]></phrase>
+  <phrase title="option_explain.mhfsTimeout" version_id="2000070" version_string="0.2.0"><![CDATA[Maximum time in seconds that posting waits for the classifier response.]]></phrase>
+  <phrase title="option_explain.mhfsFailOpen" version_id="2000070" version_string="0.2.0"><![CDATA[When enabled, API failures allow normal publication; when disabled, API failures send content to moderation.]]></phrase>
   <phrase title="option_explain.mhfsStoreMessage" version_id="2000070" version_string="0.2.0"><![CDATA[For privacy, leave this off unless controlled debugging requires stored text. The message hash is always stored.]]></phrase>
   <phrase title="option_explain.mhfsStoreRawResponse" version_id="2000070" version_string="0.2.0"><![CDATA[Raw classifier responses may contain sentence text. They are only persisted when this option and message-text storage are both enabled. Leave off for normal operation.]]></phrase>
   <phrase title="option_explain.mhfsExcludedForums" version_id="2000070" version_string="0.2.0"><![CDATA[Posts in selected forums will not be sent to the classifier API.]]></phrase>

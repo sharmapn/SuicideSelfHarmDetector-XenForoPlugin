@@ -80,6 +80,13 @@ class ApiTestCase(unittest.TestCase):
         response = self.client.post("/api/classify", json={"message": "alpha ordinary."})
         self.assertEqual(response.status_code, 401)
 
+        response = self.client.post(
+            "/api/classify",
+            json={"message": "alpha ordinary."},
+            headers={"Authorization": "Bearer wrong-secret"},
+        )
+        self.assertEqual(response.status_code, 401)
+
     def test_invalid_json(self):
         response = self.client.post(
             "/api/classify",
@@ -100,6 +107,43 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(data["highest_label"], "not_harmful")
         self.assertEqual(data["recommended_action"], "allow")
         self.assertEqual(data["flagged_parts"], [])
+        self.assertTrue({
+            "risk_level",
+            "recommended_action",
+            "highest_label",
+            "highest_score",
+            "score_type",
+            "flagged_parts",
+            "sentence_results",
+        }.issubset(data))
+
+    def test_empty_message(self):
+        response = self.client.post(
+            "/api/classify",
+            json={"message": "   "},
+            headers=self.auth_headers(),
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.get_json()
+        self.assertEqual(data["highest_label"], "not_harmful")
+        self.assertEqual(data["recommended_action"], "allow")
+        self.assertEqual(data["sentence_results"], [])
+
+    def test_unicode_and_sentence_offsets(self):
+        message = "alpha café neutral. alpha kōrero ordinary."
+        response = self.client.post(
+            "/api/classify",
+            json={"message": message},
+            headers=self.auth_headers(),
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.get_json()
+        self.assertEqual(len(data["sentence_results"]), 2)
+        for sentence in data["sentence_results"]:
+            self.assertEqual(
+                message[sentence["start_offset"]:sentence["end_offset"]],
+                sentence["text"],
+            )
 
     def test_method_outranks_safe_in_multi_sentence_message(self):
         response = self.client.post(
@@ -115,6 +159,28 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(len(data["flagged_parts"]), 1)
         self.assertIn("start_offset", data["flagged_parts"][0])
         self.assertIn("end_offset", data["flagged_parts"][0])
+
+    def test_method_outranks_ideation(self):
+        response = self.client.post(
+            "/api/classify",
+            json={"message": "beta ideation concept. gamma method concept."},
+            headers=self.auth_headers(),
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.get_json()
+        self.assertEqual(data["highest_label"], "method_or_action")
+        self.assertEqual(data["risk_level"], "high")
+
+    def test_ideation_outranks_safe(self):
+        response = self.client.post(
+            "/api/classify",
+            json={"message": "alpha ordinary neutral. beta ideation concept."},
+            headers=self.auth_headers(),
+        )
+        self.assertEqual(response.status_code, 200)
+        data = response.get_json()
+        self.assertEqual(data["highest_label"], "ideation")
+        self.assertEqual(data["risk_level"], "medium")
 
     def test_ideation_is_moderated(self):
         response = self.client.post(
@@ -139,6 +205,25 @@ class ApiTestCase(unittest.TestCase):
             self.assertEqual(response.status_code, 400)
         finally:
             self.server.MAX_MESSAGE_CHARS = previous
+
+    def test_publication_safe_label_is_normalised_as_safe(self):
+        self.assertEqual(
+            self.server.normalise_label("Not Ideation or method or action"),
+            "not_harmful",
+        )
+
+    def test_unknown_label_fails_conservatively(self):
+        result = self.server.aggregate_results([{
+            "text": "synthetic unknown label",
+            "label": "unexpected_class",
+            "raw_label": "Unexpected class",
+            "score": 1.0,
+            "score_type": self.server.SCORE_TYPE,
+            "start_offset": 0,
+            "end_offset": 23,
+        }])
+        self.assertEqual(result["risk_level"], "unknown")
+        self.assertEqual(result["recommended_action"], "moderate")
 
 
 if __name__ == "__main__":
