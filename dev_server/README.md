@@ -4,17 +4,37 @@ This directory contains the reference HTTP adapter used by the XenForo add-on.
 
 ## Model used
 
-The current adapter is designed for the **final Linear SVM pipeline** produced by `training12_py314.py` in the companion research repository:
+The adapter is designed for the **final Linear SVM inference pipeline** used by the research workflow:
 
 ```text
 Suicide_SVM_pipeline.joblib
 ```
 
-That artefact is an sklearn `Pipeline` containing the fitted `CountVectorizer`, `TfidfTransformer`, and `LinearSVC`, so raw sentences can be passed directly to `pipeline.predict(...)`.
+The complete publication-facing ML run preserved in the companion repository produced this artefact from the final actual/augmented training construction and evaluated it on the 957,154-sentence actual-only held-out test set. The current `training12_py314.py` retains the same SVM export logic and can regenerate the pipeline when traditional ML is enabled.
 
-The model file is intentionally **not committed** to this repository. Copy the trained artefact to a protected server location and set `MHFS_MODEL_PATH` to it.
+The artefact is an sklearn `Pipeline` containing the fitted `CountVectorizer`, `TfidfTransformer`, and `LinearSVC`, so raw sentences can be passed directly to `pipeline.predict(...)`.
+
+The model file is intentionally **not committed** to this repository. Copy the trained artefact to a protected server location and set `MHFS_MODEL_PATH` to it. Therefore, the filename alone does not prove that a deployment is using the final binary.
 
 The adapter also supports `Suicide_SVM_with_vectorizer_bundle.joblib`, although the complete pipeline is preferred.
+
+### Verify the deployed model
+
+After setting `MHFS_MODEL_PATH`, run:
+
+```powershell
+python verify_model.py
+```
+
+The verifier prints the model path, file size, SHA-256 digest, pipeline steps, and class labels. The final three-class artefact must expose exactly:
+
+```text
+Not Suicide post
+Ideation of Suicide, Self-Harm or Harming Others
+Method or action of Suicide, Self-Harm or Harming others
+```
+
+Record the SHA-256 digest with the deployment. This provides an auditable way to prove which model binary the API is actually loading.
 
 ## Important deployment behaviour
 
@@ -48,6 +68,12 @@ $env:MHFS_MODEL_PATH="C:\path\to\Suicide_SVM_pipeline.joblib"
 $env:MHFS_API_KEY="replace-with-a-long-random-secret"
 $env:MHFS_HOST="127.0.0.1"
 $env:MHFS_PORT="8000"
+```
+
+Verify the artefact before starting the API:
+
+```powershell
+python verify_model.py
 ```
 
 For a local development test:
