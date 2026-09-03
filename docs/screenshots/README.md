@@ -2,9 +2,9 @@
 
 Captured on 2026-09-04 from a local XenForo 2.3.12 installation with MHF Safeguard 0.2.0. XenForo's native Light appearance was selected for both the forum and AdminCP. These are real browser content captures, with no recoloring, generated UI, or image upscaling.
 
-The three latest explicit-method images (`09`, `10`, and `11`) were retaken with a **1920 × 1080 desktop viewport**, as requested, replacing their narrow versions. The screenshot tool produced 1905 × 1072 PNGs for the input and moderated thread, and a 1920 × 1080 PNG for the revision overlay. These capture the webpage viewport, not the browser address bar or operating-system window frame. Images `01a` through `08` retain their original narrow viewport; previous versions of `09`–`11` remain recoverable in Git history.
+All **12 images** were retaken with a **1920 × 1080 desktop viewport**, as requested, replacing the narrow versions. The screenshot tool produced 1905 × 1072 PNGs for the ordinary pages and 1920 × 1080 PNGs for the two revision overlays (`06` and `11`). These capture the webpage viewport, not the browser address bar or operating-system window frame. Configuration is shown across two scrolled viewport captures so that all options remain legible. The previous narrow versions remain recoverable in Git history.
 
-The names, posts, and scenario titles are synthetic test fixtures. No real member disclosures are included. The API-key field is masked; that display-only form edit was not saved. The installed branding remains MHF Safeguard until the planned SuicideSelfHarmDetector rename is implemented.
+The names, posts, and scenario titles are synthetic test fixtures. No real member disclosures are included. The API-key field is masked; that display-only form edit was not saved. The installed branding remains MHF Safeguard until the planned SuicideSelfHarmDetector rename is implemented. Existing thread fixtures were reused; no moderation decisions were applied during the documentation refresh. The forum captures show the current 12-item approval queue.
 
 ## Core configuration
 
@@ -46,7 +46,7 @@ This records the current installed name and version. It does not claim that the 
 
 ![Native revision warning after the explicit-method submission](light/11-explicit-method-revision.png)
 
-This capture uses the exact user-supplied sentence shown below and the live local classifier in `revise` mode. XenForo displayed the configured warning instead of publishing the submission. Database counts remained unchanged: 16 threads, 19 posts, and 20 scan rows. The native overlay dims the page behind the white dialog. The dialog mentions highlighting, but inline highlighting is not implemented. `log` mode was restored after capture. The [earlier revision capture](light/06-revision-blocked.png) is retained for the previous action example.
+This capture uses the exact user-supplied sentence shown below and the live local classifier in `revise` mode. XenForo displayed the configured warning instead of publishing the submission. Database counts remained unchanged: 16 threads, 19 posts, and 20 scan rows. The native overlay dims the page behind the white dialog. The dialog mentions highlighting, but inline highlighting is not implemented. `log` mode was restored after capture. The previous action example has its own [full-width revision capture](light/06-revision-blocked.png).
 
 ## User-supplied explicit method example
 
@@ -70,7 +70,7 @@ The title reads **“Suicide or self harm method or action - synthetic test”**
 
 ![Explicit action example awaiting approval](light/08-method-action-moderated.png)
 
-The message-only classifier probe and the live XenForo thread submission both returned `method_or_action`. The thread was retained in the approval queue in `moderate` mode. A browser submission of the same body triggered the native warning in `revise` mode. These earlier captures show 11 queued items; the original overview screenshots show the earlier 10-item state.
+The message-only classifier probe and the live XenForo thread submission both returned `method_or_action`. The thread was retained in the approval queue in `moderate` mode. A browser submission of the same body triggered the native warning in `revise` mode. These images have also been refreshed at desktop width and now show the current 12-item queue. The repeated revision submission left the database counts unchanged at 16 threads, 19 posts, and 20 scans; log-only mode was restored afterward. The earlier narrow captures showing 10 or 11 queued items remain in Git history.
 
 The initial example only said “I made an attempt to harm myself yesterday.” This earlier revised example explicitly says “self harm.” It does not name a method or provide instructions. A separate explicit suicide sentence was classified as `ideation`; see the [validation note](../validation/method-action-examples.md) for all three probes and their limitations.
 
