@@ -110,7 +110,7 @@ The class extensions use the XenForo 2.3 `*Service` class names.
 
 ## API contract
 
-The add-on sends one cleaned XenForo message plus context to the configured API endpoint:
+The add-on sends one cleaned XenForo message plus non-identifying content context to the configured API endpoint. User ID and username remain local to XenForo and are not sent to the classifier:
 
 ```json
 {
@@ -121,8 +121,6 @@ The add-on sends one cleaned XenForo message plus context to the configured API 
     "content_id": 12345,
     "thread_id": 456,
     "node_id": 12,
-    "user_id": 99,
-    "username": "example_user",
     "title": "Thread title",
     "is_first_post": false
   },
@@ -175,8 +173,9 @@ For the final SVM adapter, harmful decisions are label-driven. The threshold val
 
 ## Privacy defaults
 
-The add-on is configured to minimise persistence of sensitive forum text:
+The add-on is configured to minimise persistence and transmission of sensitive forum data:
 
+- user ID and username are **not sent** to the classifier API;
 - cleaned message storage is **off by default**;
 - raw API response storage is **off by default**;
 - when message storage is off, flagged-part text is stripped before database logging;
