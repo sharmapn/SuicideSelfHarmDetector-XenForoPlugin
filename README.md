@@ -79,25 +79,25 @@ These are explanatory diagrams, not screenshots. The journal figure summarizes t
 
 The following images were captured from **XenForo 2.3.12** in a browser using XenForo's native **Light** appearance on **2026-09-04**. They show the installed **MHF Safeguard 0.2.0** add-on, not interface mock-ups. The planned user-facing name is **SuicideSelfHarmDetector**; the rename is not implemented in these captures.
 
-All **12 images** in the light-theme gallery were retaken with a **1920 × 1080 desktop viewport**, replacing the narrow side-panel captures. They cover configuration, failure/privacy controls, installed add-on details, forum outcomes, the approval queue, normal publication, and both method/action examples. These show browser page content, not the address bar or operating-system window frame.
+All **12 images** in the light-theme gallery were captured with a **1920 × 1080 desktop viewport** and then **cropped on the left and right** to remove unused margins. AdminCP images focus on the main panel, omitting the navigation sidebar. No retained pixels were changed or resized, and image heights are unchanged. They cover configuration, failure/privacy controls, installed add-on details, forum outcomes, the approval queue, normal publication, and both method/action examples. See the [crop details and original captures](docs/screenshots/README.md#crop-provenance). These show browser page content, not the address bar or operating-system window frame.
 
 All forum examples are synthetic local test content, not real member disclosures. The API-key field was masked in the unsaved browser form before capture; no credential is included in these images. The temporary revision test was followed by restoring `log` mode, fail-open behavior, and message/raw-response storage off.
 
 ### Plugin configuration
 
-![Full-width MHF Safeguard configuration with the API key masked](docs/screenshots/light/01a-admin-settings-core.png)
+![Cropped desktop MHF Safeguard configuration with the API key masked](docs/screenshots/light/01a-admin-settings-core.png)
 
 Enabled scanning, the local classifier endpoint, action mode, and secondary thresholds. The token mask is an unsaved display-only edit, not a replacement API key. SVM scores are not calibrated probabilities.
 
 ### Failure policy and privacy controls
 
-![Full-width timeout, failure policy, scan-storage controls, and excluded forums](docs/screenshots/light/01b-admin-settings-safety-privacy.png)
+![Cropped desktop timeout, failure policy, scan-storage controls, and excluded forums](docs/screenshots/light/01b-admin-settings-safety-privacy.png)
 
 The local configuration uses an eight-second timeout, fail-open behavior, and no stored message text or raw API responses. No forums are excluded.
 
 ### Installed add-on
 
-![Full-width installed MHF Safeguard add-on details](docs/screenshots/light/05-installed-add-on.png)
+![Cropped desktop installed MHF Safeguard add-on details](docs/screenshots/light/05-installed-add-on.png)
 
 The installed version is **MHF Safeguard 0.2.0**. The user-facing rename is still planned, not implemented.
 

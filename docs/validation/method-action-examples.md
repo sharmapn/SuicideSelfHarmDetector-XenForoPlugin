@@ -62,7 +62,7 @@ The same exact body and title were then entered through the browser and submitte
 
 The rejected submission therefore created no additional thread, post, or scan row. This also means the revision screenshot is UI evidence, not a persisted audit record of that rejected attempt. See the [exact input](../screenshots/light/09-explicit-method-input.png) and [revision warning](../screenshots/light/11-explicit-method-revision.png). The moderation and revision demonstrations used different local test accounts (synthetic audit member and local administrator, respectively), as visible in the captures.
 
-The latest three images were recaptured in XenForo's Light appearance with a 1920 × 1080 desktop viewport after the user requested full-size browser screenshots. The input and moderated-thread PNGs are 1905 × 1072; the revision overlay PNG is 1920 × 1080. These are webpage captures without the browser address bar or window frame. The existing moderated thread was reused; no duplicate moderation fixture was created. Repeating the revision submission again left counts unchanged at 16 threads, 19 posts, and 20 scans, and `log` mode was restored afterward.
+The latest three images were recaptured in XenForo's Light appearance with a 1920 × 1080 desktop viewport after the user requested full-size browser screenshots. Before the later horizontal crop, the input and moderated-thread PNGs were 1905 × 1072; the revision overlay PNG was 1920 × 1080. These are webpage captures without the browser address bar or window frame. The existing moderated thread was reused; no duplicate moderation fixture was created. Repeating the revision submission again left counts unchanged at 16 threads, 19 posts, and 20 scans, and `log` mode was restored afterward.
 
 No screenshot recoloring, upscaling, fabricated interface, model retraining, or threshold adjustment was used. Both examples remain documented; replaced narrow screenshot versions remain in Git history.
 
@@ -71,6 +71,10 @@ No screenshot recoloring, upscaling, fabricated interface, model retraining, or 
 The remaining nine images (configuration, privacy/failure controls, installed add-on, forum overview, approval queue, normal publication, and the earlier action example's three screens) were subsequently retaken with the same 1920 × 1080 desktop viewport. All 12 gallery images now use the desktop layout. The configuration token was masked in an unsaved form before capture; the stored token was not replaced. Existing thread fixtures were reused, and no approve/delete/spam decisions were applied.
 
 The earlier action example was resubmitted only in `revise` mode to reproduce its warning at desktop width. Counts remained at 16 threads, 19 posts, and 20 scans before and after that submission. Log-only mode was restored, with fail-open enabled, an eight-second timeout, message/raw-response storage off, and no excluded forums. The refreshed forum screenshots show 12 queued items; older screenshots with 10 or 11 are retained in Git history.
+
+## Horizontal crop for publication
+
+At the user's subsequent request, all 12 screenshot files were replaced in place with lossless left/right crops of the desktop originals from commit `7513ebe`. No browser tests were rerun and no forum configuration or content was changed for this image-only operation. Every retained RGBA pixel was verified against its original; no resizing, recoloring, generation, or vertical cropping was applied. The [gallery crop-provenance table](../screenshots/README.md#crop-provenance) records the source and resulting dimensions and exact rectangles.
 
 ## Consequence of the mismatch
 

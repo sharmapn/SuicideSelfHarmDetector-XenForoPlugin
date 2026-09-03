@@ -2,9 +2,21 @@
 
 Captured on 2026-09-04 from a local XenForo 2.3.12 installation with MHF Safeguard 0.2.0. XenForo's native Light appearance was selected for both the forum and AdminCP. These are real browser content captures, with no recoloring, generated UI, or image upscaling.
 
-All **12 images** were retaken with a **1920 × 1080 desktop viewport**, as requested, replacing the narrow versions. The screenshot tool produced 1905 × 1072 PNGs for the ordinary pages and 1920 × 1080 PNGs for the two revision overlays (`06` and `11`). These capture the webpage viewport, not the browser address bar or operating-system window frame. Configuration is shown across two scrolled viewport captures so that all options remain legible. The previous narrow versions remain recoverable in Git history.
+All **12 images** were captured with a **1920 × 1080 desktop viewport**, then cropped on the left and right at the user's request. The desktop layout, original text, colors, and vertical extent are preserved without resizing. AdminCP images omit the navigation sidebar and surrounding horizontal space to focus on the settings/add-on panel. These are webpage captures, not browser-address-bar or operating-system-window captures. Configuration is shown across two scrolled captures so that all options remain legible.
 
 The names, posts, and scenario titles are synthetic test fixtures. No real member disclosures are included. The API-key field is masked; that display-only form edit was not saved. The installed branding remains MHF Safeguard until the planned SuicideSelfHarmDetector rename is implemented. Existing thread fixtures were reused; no moderation decisions were applied during the documentation refresh. The forum captures show the current 12-item approval queue.
+
+## Crop provenance
+
+The uncropped desktop PNGs are preserved at [commit `7513ebe`](https://github.com/sharmapn/SuicideSelfHarmDetector-XenForoPlugin/tree/7513ebe/docs/screenshots/light). The current files retain the same names, so existing README embeds display the cropped versions. Cropping was deterministic and lossless: every retained RGBA pixel was compared with the corresponding source pixel and matched. No image generation, resampling, recoloring, or top/bottom trimming was performed.
+
+| Images | Original PNG | Crop rectangle `(x, y, width, height)` | Current PNG |
+| --- | --- | --- | --- |
+| AdminCP: `01a`, `01b`, `05` | 1905 × 1072 | `(530, 0, 1098, 1072)` | 1098 × 1072 |
+| Forum: `02`, `03`, `04`, `07`, `08`, `09`, `10` | 1905 × 1072 | `(348, 0, 1194, 1072)` | 1194 × 1072 |
+| Revision overlays: `06`, `11` | 1920 × 1080 | `(348, 0, 1194, 1080)` | 1194 × 1080 |
+
+The visible configuration fields, post text, moderation controls, and complete revision warnings are retained. The earlier narrow captures also remain recoverable in Git history.
 
 ## Core configuration
 
@@ -46,7 +58,7 @@ This records the current installed name and version. It does not claim that the 
 
 ![Native revision warning after the explicit-method submission](light/11-explicit-method-revision.png)
 
-This capture uses the exact user-supplied sentence shown below and the live local classifier in `revise` mode. XenForo displayed the configured warning instead of publishing the submission. Database counts remained unchanged: 16 threads, 19 posts, and 20 scan rows. The native overlay dims the page behind the white dialog. The dialog mentions highlighting, but inline highlighting is not implemented. `log` mode was restored after capture. The previous action example has its own [full-width revision capture](light/06-revision-blocked.png).
+This capture uses the exact user-supplied sentence shown below and the live local classifier in `revise` mode. XenForo displayed the configured warning instead of publishing the submission. Database counts remained unchanged: 16 threads, 19 posts, and 20 scan rows. The native overlay dims the page behind the white dialog. The dialog mentions highlighting, but inline highlighting is not implemented. `log` mode was restored after capture. The previous action example has its own [cropped desktop revision capture](light/06-revision-blocked.png).
 
 ## User-supplied explicit method example
 
