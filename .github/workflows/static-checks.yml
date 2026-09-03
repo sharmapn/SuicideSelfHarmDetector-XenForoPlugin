@@ -51,3 +51,27 @@ jobs:
 
       - name: Run PHP policy/privacy logic tests
         run: php tests/php_logic_test.php
+
+  php72-compatibility:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 7.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.2'
+          coverage: none
+
+      - name: Lint add-on on PHP 7.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -v
+          find upload/src/addons/Pankaj/MHFSafeguard -name '*.php' -print0 \
+            | while IFS= read -r -d '' file; do php -l "$file"; done
+          php -l tests/php_logic_test.php
+
+      - name: Run PHP policy/privacy logic tests on PHP 7.2
+        run: php tests/php_logic_test.php
