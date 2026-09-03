@@ -17,7 +17,7 @@ jobs:
           python-version: '3.14'
 
       - name: Validate Python syntax
-        run: python -m py_compile dev_server/server.py dev_server/test_api.py
+        run: python -m py_compile dev_server/server.py dev_server/test_api.py dev_server/verify_model.py
 
       - name: Install API test dependencies
         run: python -m pip install -r dev_server/requirements.txt
