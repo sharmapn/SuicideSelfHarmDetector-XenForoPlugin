@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1350" viewBox="0 0 2600 1350" role="img">
+<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L12,6 L0,12 Z" fill="#30343b"/></marker></defs>
+<rect width="2600" height="1350" fill="#ffffff"/>
+<text x="1300" y="83.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700" fill="#20242a">
+<tspan x="1300" dy="0">Workflow for automated suicide and self-harm content triage</tspan>
+</text>
+<rect x="70" y="225" width="330" height="170" rx="8" fill="#f3f3f3" stroke="#222222" stroke-width="3"/>
+<text x="235.0" y="306.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#20242a">
+<tspan x="235.0" dy="0">New or edited</tspan>
+<tspan x="235.0" dy="38">forum content</tspan>
+</text>
+<polygon points="635.0,230 785,310.0 635.0,390 485,310.0" fill="#ffffff" stroke="#222222" stroke-width="3"/>
+<text x="635.0" y="306.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" fill="#20242a">
+<tspan x="635.0" dy="0">Enabled and</tspan>
+<tspan x="635.0" dy="35">not excluded?</tspan>
+</text>
+<rect x="875" y="225" width="350" height="170" rx="8" fill="#f3f3f3" stroke="#222222" stroke-width="3"/>
+<text x="1050.0" y="289.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="400" fill="#20242a">
+<tspan x="1050.0" dy="0">Normalize text and</tspan>
+<tspan x="1050.0" dy="34">build privacy-minimized</tspan>
+<tspan x="1050.0" dy="34">request</tspan>
+</text>
+<rect x="1315" y="225" width="340" height="170" rx="8" fill="#f3f3f3" stroke="#222222" stroke-width="3"/>
+<text x="1485.0" y="306.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="700" fill="#20242a">
+<tspan x="1485.0" dy="0">Sentence-level</tspan>
+<tspan x="1485.0" dy="37">SVM classification</tspan>
+</text>
+<rect x="1745" y="205" width="380" height="210" rx="8" fill="#f3f3f3" stroke="#222222" stroke-width="3"/>
+<text x="1935.0" y="270.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#20242a">
+<tspan x="1935.0" dy="0">Policy engine</tspan>
+<tspan x="1935.0" dy="36">Action mode</tspan>
+<tspan x="1935.0" dy="36">Risk category</tspan>
+<tspan x="1935.0" dy="36">Failure policy</tspan>
+</text>
+<polyline points="400,310 485,310" fill="none" stroke="#30343b" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<polyline points="785,310 875,310" fill="none" stroke="#30343b" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="805.0" y="265.5" width="50" height="29" fill="#ffffff"/>
+<text x="830" y="290.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#20242a">
+<tspan x="830" dy="0">Yes</tspan>
+</text>
+<polyline points="1225,310 1315,310" fill="none" stroke="#30343b" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<polyline points="1655,310 1745,310" fill="none" stroke="#30343b" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="480" y="525" width="310" height="130" rx="8" fill="#ffffff" stroke="#222222" stroke-width="3"/>
+<text x="635.0" y="586.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="400" fill="#20242a">
+<tspan x="635.0" dy="0">Normal XenForo</tspan>
+<tspan x="635.0" dy="34">processing</tspan>
+</text>
+<polyline points="635,390 635,525" fill="none" stroke="#30343b" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="655.0" y="440.5" width="40" height="29" fill="#ffffff"/>
+<text x="675" y="465.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#20242a">
+<tspan x="675" dy="0">No</tspan>
+</text>
+<rect x="1315" y="545" width="340" height="155" rx="8" fill="#ffffff" stroke="#222222" stroke-width="3"/>
+<text x="1485.0" y="602.5" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="400" fill="#20242a">
+<tspan x="1485.0" dy="0">API or response failure</tspan>
+<tspan x="1485.0" dy="32">Timeout · invalid response</tspan>
+<tspan x="1485.0" dy="32">HTTP/authentication error</tspan>
+</text>
+<polyline points="1485,395 1485,545" fill="none" stroke="#30343b" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="1505.0" y="455.5" width="80" height="29" fill="#ffffff"/>
+<text x="1545" y="480.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#20242a">
+<tspan x="1545" dy="0">Failure</tspan>
+</text>
+<polyline points="1655,620 1935,620 1935,415" fill="none" stroke="#30343b" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="2250" y="145" width="300" height="150" rx="8" fill="#ececec" stroke="#222222" stroke-width="3"/>
+<text x="2400.0" y="235.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#20242a">
+<tspan x="2400.0" dy="0">Publish</tspan>
+</text>
+<rect x="2250" y="390" width="300" height="170" rx="8" fill="#ececec" stroke="#222222" stroke-width="3"/>
+<text x="2400.0" y="471.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" fill="#20242a">
+<tspan x="2400.0" dy="0">Human moderation</tspan>
+<tspan x="2400.0" dy="35">queue</tspan>
+</text>
+<rect x="2250" y="655" width="300" height="170" rx="8" fill="#ececec" stroke="#222222" stroke-width="3"/>
+<text x="2400.0" y="753.5" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" fill="#20242a">
+<tspan x="2400.0" dy="0">Request revision</tspan>
+</text>
+<polyline points="2125,255 2185,255 2185,220 2250,220" fill="none" stroke="#30343b" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="2151.0" y="170.5" width="68" height="29" fill="#ffffff"/>
+<text x="2185" y="195.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#20242a">
+<tspan x="2185" dy="0">Allow</tspan>
+</text>
+<polyline points="2125,310 2210,310 2210,475 2250,475" fill="none" stroke="#30343b" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="2113.5" y="425.5" width="103" height="29" fill="#ffffff"/>
+<text x="2165" y="450.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#20242a">
+<tspan x="2165" dy="0">Moderate</tspan>
+</text>
+<polyline points="2125,365 2160,365 2160,740 2250,740" fill="none" stroke="#30343b" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="2076.0" y="685.5" width="78" height="29" fill="#ffffff"/>
+<text x="2115" y="710.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#20242a">
+<tspan x="2115" dy="0">Revise</tspan>
+</text>
+<rect x="1745" y="900" width="380" height="180" rx="8" fill="#ffffff" stroke="#222222" stroke-width="3"/>
+<text x="1935.0" y="953.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" fill="#20242a">
+<tspan x="1935.0" dy="0">Privacy-safe audit record</tspan>
+<tspan x="1935.0" dy="33">Hash · class · action · status</tspan>
+<tspan x="1935.0" dy="33">Message text omitted by</tspan>
+<tspan x="1935.0" dy="33">default</tspan>
+</text>
+<polyline points="1935,415 1935,900" fill="none" stroke="#30343b" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)" stroke-dasharray="12 9"/>
+<rect x="1941.5" y="803.5" width="137" height="33" fill="#ffffff"/>
+<text x="2010" y="830.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#20242a">
+<tspan x="2010" dy="0">Log decision</tspan>
+</text>
+<text x="1300" y="1211.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="400" fill="#303030">
+<tspan x="1300" dy="0">Safe content is published; ideation is routed to human review; method/action content is moderated or returned for revision.</tspan>
+<tspan x="1300" dy="33">Classifier failures follow the configured fail-open or fail-closed policy.</tspan>
+</text>
+</svg>

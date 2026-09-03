@@ -1,0 +1,63 @@
+# Light-theme XenForo screenshot gallery
+
+Captured on 2026-09-04 from a local XenForo 2.3.12 installation with MHF Safeguard 0.2.0. XenForo's native Light appearance was selected for both the forum and AdminCP. These are browser content captures at the browser's normal viewport, with no recoloring, generated UI, or image upscaling.
+
+The names, posts, and scenario titles are synthetic test fixtures. No real member disclosures are included. The API-key field is masked; that display-only form edit was not saved. The installed branding remains MHF Safeguard until the planned SuicideSelfHarmDetector rename is implemented.
+
+## Core configuration
+
+![Core configuration with masked API key](light/01a-admin-settings-core.png)
+
+Enabled scanning, the loopback classifier URL, `log` action mode, and the secondary thresholds. Linear SVM scores are ranking proxies, not calibrated probabilities.
+
+## Failure policy and privacy
+
+![Timeout, fail-open setting, privacy storage, and forum exclusions](light/01b-admin-settings-safety-privacy.png)
+
+Eight-second timeout, fail-open enabled, message/raw-response storage disabled, and no excluded forums in the final local configuration.
+
+## Forum outcome overview
+
+![Forum list with visible and awaiting-approval synthetic test threads](light/02-forum-outcome-matrix.png)
+
+Visible fail-open examples appear alongside shield-marked, awaiting-approval fail-closed examples. These are retained outcomes from the earlier scenario run, not a new simulation of every backend failure during this capture session.
+
+## Native moderation queue
+
+![Native XenForo approval queue](light/03-approval-queue-moderation.png)
+
+The moderator can approve, retain, delete, or spam-clean queued content. The item named “MHFS Audit A Normal Thread” was later edited to harmful test text for scenario H; its original title was retained.
+
+## Normal publication
+
+![Published benign test thread](light/04-normal-published-thread.png)
+
+A benign final smoke-test thread is visible normally.
+
+## Installed add-on
+
+![Installed MHF Safeguard 0.2.0 add-on](light/05-installed-add-on.png)
+
+This records the current installed name and version. It does not claim that the planned rename has been applied.
+
+## Revision warning
+
+![Native revision warning after a synthetic method/action submission](light/06-revision-blocked.png)
+
+This capture was reproduced with the live local classifier in `revise` mode. XenForo displayed the configured warning instead of publishing the submission. The native overlay dims the page behind the white dialog. The dialog mentions highlighting, but inline highlighting is not implemented. `log` mode was restored after capture.
+
+## Scenario coverage
+
+| Scenario | Behavior checked in the local audit | Relevant screenshot |
+| --- | --- | --- |
+| A / D | Benign thread / reply remains visible | Normal publication |
+| B / E | Ideation thread / reply is queued in moderation mode; log mode leaves publication unchanged | Moderation queue |
+| C / F | Method/action thread / reply is queued; `revise` blocks method/action publication | Moderation queue; revision warning |
+| G / H | Editing a reply / first post to harmful content persists moderation | Moderation queue; retained title explained above |
+| I | Excluded forum skips the classifier and scan logging | Privacy/exclusion configuration; not proved by a screenshot alone |
+| J / K | API unavailable: fail-open allows, fail-closed moderates | Failure-policy configuration; retained forum outcomes |
+| L | Malformed response follows the configured failure policy | Forum outcome overview |
+| M | HTTP 500 follows the configured failure policy | Forum outcome overview |
+| N | Authentication mismatch is handled without a fatal error or secret leak | Forum outcome overview |
+
+Screenshots illustrate the UI states; request counts, database persistence, and absence of scan rows require the underlying test evidence rather than visual inspection alone. All captures are from local staging, not a production or clinical evaluation.

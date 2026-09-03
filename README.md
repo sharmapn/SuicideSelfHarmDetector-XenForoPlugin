@@ -69,7 +69,35 @@ Allow / log / native XenForo moderation / revision request
 Privacy-conscious scan audit record
 ```
 
-![Workflow of the XenForo plugin](docs/images/workflow.svg)
+![Simplified workflow for suicide and self-harm content triage](docs/figures/journal-process-diagram.png)
+
+Publication assets: [journal figure (SVG)](docs/figures/journal-process-diagram.svg) · [journal figure (PNG)](docs/figures/journal-process-diagram.png) · [detailed process and scenarios (SVG)](docs/figures/detailed-process-diagram.svg) · [detailed process and scenarios (PNG)](docs/figures/detailed-process-diagram.png).
+
+These are explanatory diagrams, not screenshots. The journal figure summarizes the enforcement workflow; in `log` mode every classifier label is allowed without changing XenForo's publication decision. See the policy table below for the exact mode-dependent behavior.
+
+## Real XenForo screenshots
+
+The following images were captured from **XenForo 2.3.12** in a browser using XenForo's native **Light** appearance on **2026-09-04**. They show the installed **MHF Safeguard 0.2.0** add-on, not interface mock-ups. The planned user-facing name is **SuicideSelfHarmDetector**; the rename is not implemented in these captures.
+
+All forum examples are synthetic local test content, not real member disclosures. The API-key field was masked in the unsaved browser form before capture; no credential is included in these images. The temporary revision test was followed by restoring `log` mode, fail-open behavior, and message/raw-response storage off.
+
+### Normal publication
+
+![A benign test thread published normally](docs/screenshots/light/04-normal-published-thread.png)
+
+### Human moderation
+
+![Synthetic ideation and method/action test content in XenForo's native approval queue](docs/screenshots/light/03-approval-queue-moderation.png)
+
+The first queue item retains its original “Normal Thread” title but was subsequently edited to harmful test content in scenario H. It is not evidence of a benign-content false positive.
+
+### Revision request
+
+![The implemented generic revision warning in XenForo's light appearance](docs/screenshots/light/06-revision-blocked.png)
+
+This is XenForo's native validation dialog. Its background dimming is part of the actual UI. The wording mentions highlighted language, but **inline sentence highlighting is not implemented**.
+
+See the [full light-theme screenshot gallery and scenario notes](docs/screenshots/README.md) for configuration, privacy controls, the installed add-on, and fail-open/fail-closed examples. These figures document local staging behavior, not production readiness or clinical validity.
 
 ## Repository structure
 
@@ -82,7 +110,9 @@ SuicideSelfHarmDetector-XenForoPlugin/
 │   ├── server.py
 │   ├── requirements.txt
 │   └── README.md
-├── docs/images/
+├── docs/figures/       # Explanatory process diagrams (PNG/SVG)
+├── docs/screenshots/   # Real local XenForo browser captures
+├── docs/images/        # Earlier conceptual interface mock-ups
 └── .github/workflows/static-checks.yml
 ```
 
@@ -153,7 +183,7 @@ A 2xx response missing required fields is treated as an API failure rather than 
 | `moderate` | publish | moderation queue | moderation queue |
 | `revise` | publish | moderation queue | request revision |
 
-The moderation queue is XenForo's native moderated-content workflow. The current revision response is a generic XenForo validation message; the graphical screens under `docs/images/` are **design mock-ups**, not implemented AdminCP/front-end pages.
+The moderation queue is XenForo's native moderated-content workflow. The current revision response is a generic XenForo validation message. The older interface illustrations under `docs/images/` are **design mock-ups**, not implemented AdminCP/front-end pages; the captures under `docs/screenshots/` show the actual implemented UI.
 
 ## Configuration
 
