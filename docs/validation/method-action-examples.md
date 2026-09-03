@@ -62,7 +62,9 @@ The same exact body and title were then entered through the browser and submitte
 
 The rejected submission therefore created no additional thread, post, or scan row. This also means the revision screenshot is UI evidence, not a persisted audit record of that rejected attempt. See the [exact input](../screenshots/light/09-explicit-method-input.png) and [revision warning](../screenshots/light/11-explicit-method-revision.png). The moderation and revision demonstrations used different local test accounts (synthetic audit member and local administrator, respectively), as visible in the captures.
 
-These are normal-viewport browser captures in XenForo's Light appearance. No screenshot recoloring, fabricated interface, model retraining, or threshold adjustment was used. The previous demonstration images remain available rather than being overwritten.
+The latest three images were recaptured in XenForo's Light appearance with a 1920 × 1080 desktop viewport after the user requested full-size browser screenshots. The input and moderated-thread PNGs are 1905 × 1072; the revision overlay PNG is 1920 × 1080. These are webpage captures without the browser address bar or window frame. The existing moderated thread was reused; no duplicate moderation fixture was created. Repeating the revision submission again left counts unchanged at 16 threads, 19 posts, and 20 scans, and `log` mode was restored afterward.
+
+No screenshot recoloring, upscaling, fabricated interface, model retraining, or threshold adjustment was used. The earlier action-example images remain unchanged; the replaced narrow versions of the explicit-method images remain in Git history.
 
 ## Consequence of the mismatch
 

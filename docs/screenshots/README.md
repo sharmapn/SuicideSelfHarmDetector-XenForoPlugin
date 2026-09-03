@@ -1,6 +1,8 @@
 # Light-theme XenForo screenshot gallery
 
-Captured on 2026-09-04 from a local XenForo 2.3.12 installation with MHF Safeguard 0.2.0. XenForo's native Light appearance was selected for both the forum and AdminCP. These are browser content captures at the browser's normal viewport, with no recoloring, generated UI, or image upscaling.
+Captured on 2026-09-04 from a local XenForo 2.3.12 installation with MHF Safeguard 0.2.0. XenForo's native Light appearance was selected for both the forum and AdminCP. These are real browser content captures, with no recoloring, generated UI, or image upscaling.
+
+The three latest explicit-method images (`09`, `10`, and `11`) were retaken with a **1920 × 1080 desktop viewport**, as requested, replacing their narrow versions. The screenshot tool produced 1905 × 1072 PNGs for the input and moderated thread, and a 1920 × 1080 PNG for the revision overlay. These capture the webpage viewport, not the browser address bar or operating-system window frame. Images `01a` through `08` retain their original narrow viewport; previous versions of `09`–`11` remain recoverable in Git history.
 
 The names, posts, and scenario titles are synthetic test fixtures. No real member disclosures are included. The API-key field is masked; that display-only form edit was not saved. The installed branding remains MHF Safeguard until the planned SuicideSelfHarmDetector rename is implemented.
 

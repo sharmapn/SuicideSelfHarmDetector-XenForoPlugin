@@ -79,6 +79,8 @@ These are explanatory diagrams, not screenshots. The journal figure summarizes t
 
 The following images were captured from **XenForo 2.3.12** in a browser using XenForo's native **Light** appearance on **2026-09-04**. They show the installed **MHF Safeguard 0.2.0** add-on, not interface mock-ups. The planned user-facing name is **SuicideSelfHarmDetector**; the rename is not implemented in these captures.
 
+The latest explicit-method input, moderation, and revision screenshots were retaken with a **1920 × 1080 desktop viewport**, replacing the narrow side-panel captures. These show browser page content, not the address bar or operating-system window frame. The older overview screenshots retain their original dimensions.
+
 All forum examples are synthetic local test content, not real member disclosures. The API-key field was masked in the unsaved browser form before capture; no credential is included in these images. The temporary revision test was followed by restoring `log` mode, fail-open behavior, and message/raw-response storage off.
 
 ### Normal publication
