@@ -91,21 +91,21 @@ All forum examples are synthetic local test content, not real member disclosures
 
 The first queue item retains its original “Normal Thread” title but was subsequently edited to harmful test content in scenario H. It is not evidence of a benign-content false positive.
 
-### Explicit self-harm action example
+### Explicit self-harm method/action example
 
-The category title is **“Suicide or self harm method or action - synthetic test”**. The message itself explicitly describes an action without giving any method instructions:
+The category title is **“Suicide or self harm method or action - synthetic test”**. The user-supplied synthetic message explicitly names a self-harm method and a time frame:
 
-> I made an attempt to harm myself yesterday; this was an act of self harm.
+> I want to slit my wrists tonight.
 
-![Explicit synthetic self-harm action example awaiting moderation](docs/screenshots/light/08-method-action-moderated.png)
+![Explicit synthetic self-harm method example awaiting moderation](docs/screenshots/light/10-explicit-method-moderated.png)
 
-The live local classifier returned `method_or_action`; XenForo queued the thread in `moderate` mode and displayed the revision warning in `revise` mode. [View the input screenshot](docs/screenshots/light/07-method-action-input.png).
+The message-only classifier probe and the live XenForo submission returned `method_or_action`. XenForo queued the thread in `moderate` mode and displayed the revision warning in `revise` mode. The revision submission created no additional thread, post, or scan row. [View the exact input screenshot](docs/screenshots/light/09-explicit-method-input.png).
 
-**Observed limitation:** a separate probe of “I attempted suicide yesterday.” returned `ideation`, despite describing an action. The successful screenshot is a demonstration, not an accuracy evaluation. Both results are documented in the [sentence-level validation note](docs/validation/method-action-examples.md).
+**Observed limitation:** a separate probe of “I attempted suicide yesterday.” returned `ideation`, despite describing an action. The successful screenshot is a demonstration, not an accuracy evaluation. All three probes, including the previous self-harm action example, are documented in the [sentence-level validation note](docs/validation/method-action-examples.md).
 
 ### Revision request
 
-![The implemented generic revision warning in XenForo's light appearance](docs/screenshots/light/06-revision-blocked.png)
+![The implemented generic revision warning after the explicit-method submission](docs/screenshots/light/11-explicit-method-revision.png)
 
 This is XenForo's native validation dialog. Its background dimming is part of the actual UI. The wording mentions highlighted language, but **inline sentence highlighting is not implemented**.
 

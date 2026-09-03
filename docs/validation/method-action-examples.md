@@ -4,16 +4,17 @@ Date: 2026-09-04. Environment: local XenForo 2.3.12, MHF Safeguard 0.2.0, and th
 
 ## Classifier probes
 
-The two probes sent only a `message` field through the configured authenticated classifier gateway. The category title was not part of either probe.
+The three probes sent only a `message` field through the configured authenticated classifier gateway. The category title was not part of any probe.
 
 | Synthetic sentence | HTTP status | Observed label | Interpretation |
 | --- | --- | --- | --- |
 | I attempted suicide yesterday. | 200 | `ideation` | Category mismatch: the sentence describes an action, but the model returned ideation. |
 | I made an attempt to harm myself yesterday; this was an act of self harm. | 200 | `method_or_action` | Used for the explicit action demonstration. |
+| I want to slit my wrists tonight. | 200 | `method_or_action` | Exact user-supplied synthetic method/action example; names a method and time frame. |
 
 These are observed demonstration probes, not a held-out benchmark or a new evaluation of sensitivity/specificity. The first result is retained here rather than omitted in favor of the successful example. No classifier code, model weights, labels, or thresholds were changed to obtain the demonstration.
 
-## XenForo demonstration
+## Earlier XenForo action demonstration
 
 Title: **Suicide or self harm method or action - synthetic test**
 
@@ -31,6 +32,37 @@ In `moderate` mode, the real XenForo thread-creation service returned:
 The first post's `message_state` was `visible`, while the enclosing thread's `discussion_state` was `moderated`. XenForo therefore displayed **“Awaiting approval before being displayed publicly.”**
 
 The same body was then submitted through the browser in `revise` mode. XenForo displayed the configured revision warning. The input and resulting UI are preserved in the [light-theme screenshot gallery](../screenshots/README.md).
+
+## User-supplied explicit method demonstration
+
+Title: **Suicide or self harm method or action - synthetic test**
+
+Exact body:
+
+> I want to slit my wrists tonight.
+
+The message-only gateway probe returned `ok=true`, HTTP `200`, `highest_label=method_or_action`, and `recommended_action=moderate`. This label was not inferred from the category title.
+
+In `moderate` mode, the real XenForo thread-creation service returned:
+
+- one new thread (local ID 16), one first post (local ID 19), and one scan row (local ID 20);
+- `highest_label=method_or_action`, `risk_level=high`, `final_action=moderate`, and API status `200`;
+- `discussion_state=moderated`, with the first post's `message_state=visible`; the enclosing thread remained non-public;
+- a 64-character message hash, with message text and raw response null and flagged text omitted from the scan row.
+
+The actual browser page displayed **“Awaiting approval before being displayed publicly.”** The screenshot is [10-explicit-method-moderated.png](../screenshots/light/10-explicit-method-moderated.png).
+
+The same exact body and title were then entered through the browser and submitted in `revise` mode. XenForo displayed its native revision warning. Counts taken immediately before and after that browser submission were unchanged:
+
+| Persisted rows | Before revision submission | After revision submission |
+| --- | --- | --- |
+| Threads | 16 | 16 |
+| Posts | 19 | 19 |
+| Scan rows | 20 | 20 |
+
+The rejected submission therefore created no additional thread, post, or scan row. This also means the revision screenshot is UI evidence, not a persisted audit record of that rejected attempt. See the [exact input](../screenshots/light/09-explicit-method-input.png) and [revision warning](../screenshots/light/11-explicit-method-revision.png). The moderation and revision demonstrations used different local test accounts (synthetic audit member and local administrator, respectively), as visible in the captures.
+
+These are normal-viewport browser captures in XenForo's Light appearance. No screenshot recoloring, fabricated interface, model retraining, or threshold adjustment was used. The previous demonstration images remain available rather than being overwritten.
 
 ## Consequence of the mismatch
 

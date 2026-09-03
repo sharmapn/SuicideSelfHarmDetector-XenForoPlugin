@@ -42,11 +42,23 @@ This records the current installed name and version. It does not claim that the 
 
 ## Revision warning
 
-![Native revision warning after a synthetic method/action submission](light/06-revision-blocked.png)
+![Native revision warning after the explicit-method submission](light/11-explicit-method-revision.png)
 
-This capture was refreshed using the explicit self-harm sentence shown below and the live local classifier in `revise` mode. XenForo displayed the configured warning instead of publishing the submission. The native overlay dims the page behind the white dialog. The dialog mentions highlighting, but inline highlighting is not implemented. `log` mode was restored after capture.
+This capture uses the exact user-supplied sentence shown below and the live local classifier in `revise` mode. XenForo displayed the configured warning instead of publishing the submission. Database counts remained unchanged: 16 threads, 19 posts, and 20 scan rows. The native overlay dims the page behind the white dialog. The dialog mentions highlighting, but inline highlighting is not implemented. `log` mode was restored after capture. The [earlier revision capture](light/06-revision-blocked.png) is retained for the previous action example.
 
-## Explicit suicide/self-harm method or action example
+## User-supplied explicit method example
+
+The title reads **“Suicide or self harm method or action - synthetic test”**. The exact synthetic body is:
+
+> I want to slit my wrists tonight.
+
+![Exact user-supplied synthetic sentence in the XenForo editor](light/09-explicit-method-input.png)
+
+![Explicit method example awaiting approval](light/10-explicit-method-moderated.png)
+
+The message-only probe returned HTTP 200 and `method_or_action`; the title was not included in that probe. A real XenForo thread-creation service submission of the same body in `moderate` mode created one thread, one first post, and one scan row. The thread remained non-public with `discussion_state=moderated`. The later browser submission in `revise` mode produced the warning above without saving another thread or post. These captures show 12 queued items. No model code, weights, or thresholds were changed for the demonstration.
+
+## Earlier explicit self-harm action example
 
 The title reads **“Suicide or self harm method or action - synthetic test”**. The body is a synthetic, non-instructional description of an action:
 
@@ -56,9 +68,9 @@ The title reads **“Suicide or self harm method or action - synthetic test”**
 
 ![Explicit action example awaiting approval](light/08-method-action-moderated.png)
 
-The message-only classifier probe and the live XenForo thread submission both returned `method_or_action`. The thread was retained in the approval queue in `moderate` mode. A browser submission of the same body triggered the native warning in `revise` mode. These new captures show 11 queued items; the older screenshots show the earlier 10-item state.
+The message-only classifier probe and the live XenForo thread submission both returned `method_or_action`. The thread was retained in the approval queue in `moderate` mode. A browser submission of the same body triggered the native warning in `revise` mode. These earlier captures show 11 queued items; the original overview screenshots show the earlier 10-item state.
 
-The earlier example only said “I made an attempt to harm myself yesterday.” The revised example explicitly says “self harm.” It does not provide a method or instructions. A separate explicit suicide sentence was classified as `ideation`; see the [validation note](../validation/method-action-examples.md) for both outcomes and their limitations.
+The initial example only said “I made an attempt to harm myself yesterday.” This earlier revised example explicitly says “self harm.” It does not name a method or provide instructions. A separate explicit suicide sentence was classified as `ideation`; see the [validation note](../validation/method-action-examples.md) for all three probes and their limitations.
 
 ## Scenario coverage
 
